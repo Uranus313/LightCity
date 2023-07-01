@@ -398,7 +398,7 @@ public class Database {
             while (resultSet1.next()) {
                 int ID = resultSet1.getInt(1);
                 String username = resultSet1.getString(2);
-                String password = resultSet1.getString(3);
+                String password = Main.decode(resultSet1.getString(3));
 
                 users.add(new User(ID, username, password));
             }
@@ -730,7 +730,8 @@ public class Database {
 
             ps.setInt(1, user_temp.getID());
             ps.setString(2, user_temp.getUsername());
-            ps.setString(3, user_temp.getPassword());
+
+            ps.setString(3, Main.encode(user_temp.getPassword()));
             ps.executeUpdate();
 
 

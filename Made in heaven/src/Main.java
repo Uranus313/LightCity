@@ -10,6 +10,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import java.util.Objects;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -20,22 +34,22 @@ public class Main extends Application {
     public void start(Stage window) throws Exception {
 //        new Heaven();
 //      Heaven.menu(window);
-      Button[] buttons = new Button[48];
-      VBox vBox = new VBox();
-      vBox.setAlignment(Pos.TOP_CENTER);
-      vBox.setSpacing(5);
-      HBox hBox = new HBox();
-      hBox.setAlignment(Pos.TOP_LEFT);
-      hBox.setStyle("-fx-background-color: blue;");
-      Label nameLabel = new Label("Mehrbod 100");
-      hBox.getChildren().add(nameLabel);
-      Image bankImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Bank.jpg");
-      for(int i =0;i<48;i++){
-          buttons[i]= new Button();
-          ImageView view = new ImageView(bankImage);
-          buttons[i].setGraphic(view);
-      }
-      int i=0;
+        Button[] buttons = new Button[48];
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.setSpacing(5);
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.TOP_LEFT);
+        hBox.setStyle("-fx-background-color: blue;");
+        Label nameLabel = new Label("Mehrbod 100");
+        hBox.getChildren().add(nameLabel);
+        Image bankImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Bank.jpg");
+        for(int i =0;i<48;i++){
+            buttons[i]= new Button();
+            ImageView view = new ImageView(bankImage);
+            buttons[i].setGraphic(view);
+        }
+        int i=0;
         GridPane layout = new GridPane();
         layout.add(buttons[i++],0,0);
         layout.add(buttons[i++],7,0);
@@ -104,4 +118,56 @@ public class Main extends Application {
 
 
     }
+
+
+
+
+
+    private static PublicKey loadPublicKey() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+
+        byte[] publicKeyBytes = Objects.requireNonNull(Main.class.getResourceAsStream("/key.pub")).readAllBytes();
+
+        KeyFactory publicKeyFactory = KeyFactory.getInstance("RSA");
+        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+        return publicKeyFactory.generatePublic(publicKeySpec);
+    }
+
+
+    public static String encode(String toEncode) throws Exception {
+
+        PublicKey publicKey = loadPublicKey();
+
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+        byte[] bytes = cipher.doFinal(toEncode.getBytes(StandardCharsets.UTF_8));
+        return new String(Base64.getEncoder().encode(bytes));
+    }
+
+
+
+    private static PrivateKey loadPrivateKey() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+
+        byte[] privateKeyBytes = Objects.requireNonNull(Main.class.getResourceAsStream("/key.priv")).readAllBytes();
+
+        KeyFactory privateKeyFactory = KeyFactory.getInstance("RSA");
+        EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+        return privateKeyFactory.generatePrivate(privateKeySpec);
+    }
+
+
+    public static String decode(String toDecode) throws Exception {
+
+        PrivateKey privateKey = loadPrivateKey();
+
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+        byte[] bytes = cipher.doFinal(Base64.getDecoder().decode(toDecode));
+        return new String(bytes);
+
+    }
+
+
+
 }
