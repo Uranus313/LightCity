@@ -1,7 +1,11 @@
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.Timestamp;
@@ -33,15 +37,21 @@ public class LightCity {
     private long factoryIncome=50;
     private long dayNumber=0;
     private Timestamp startTime;
+    Label infoLabel;
 
-
+    Button[] buttons = new Button[48];
     public LightCity(String name, String passWord) {
+
         this.name = name;
         this.passWord = passWord;
         blocks= new ArrayList<>();
         users= new ArrayList<>();
         avatars = new ArrayList<>();
+;
         this.ID=IDCreator;
+        for(int i=0;i<48;i++){
+            this.getBlocks().add(new Block("block "+i,blockPrice,this.getID()));
+        }
         IDCreator++;
         startTime = new Timestamp(new Date().getTime());
     }
@@ -72,7 +82,9 @@ public class LightCity {
         this.factoryIncome = factoryIncome;
         this.dayNumber = dayNumber;
         this.startTime = startTime;
-
+        blocks= new ArrayList<>();
+        users= new ArrayList<>();
+        avatars = new ArrayList<>();
 
     }
 
@@ -100,120 +112,286 @@ public class LightCity {
         this.ID=IDCreator;
         IDCreator++;
         startTime = new Timestamp(new Date().getTime());
+        for(int i=0;i<48;i++){
+            this.getBlocks().add(new Block("block "+i,blockPrice,this.getID()));
+        }
+        blocks= new ArrayList<>();
+        users= new ArrayList<>();
+        avatars = new ArrayList<>();
+    }
+    public void reload(Avatar avatar){
+        timeSkip();
+            for (int i = 0; i < 48; i++) {
+                final int j = i;
+                Block block1 = this.getBlocks().get(j);
+                ImageView imageView = new ImageView(Heaven.blockImage);
+                buttons[i].setGraphic(imageView);
+                if (block1.getClass() == Bank.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Casino.class) {
+                    ImageView imageView1 = new ImageView(Heaven.casinoImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == DrugStore.class) {
+                    ImageView imageView1 = new ImageView(Heaven.drugStoreImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Factory.class) {
+                    ImageView imageView1 = new ImageView(Heaven.factoryImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Restaurant.class) {
+                    ImageView imageView1 = new ImageView(Heaven.restaurantImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == SuperMarket.class) {
+                    ImageView imageView1 = new ImageView(Heaven.superMarketImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Entertainment.class) {
+                    ImageView imageView1 = new ImageView(Heaven.entertainmentImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+
+                buttons[i].setOnAction(e -> {
+                    Block block = this.getBlocks().get(j);
+                    if (block.getClass() == Bank.class) {
+                        block = (Bank) block;
+                    }
+                    if (block.getClass() == Casino.class) {
+                        block = (Casino) block;
+                    }
+                    if (block.getClass() == DrugStore.class) {
+                        block = (DrugStore) block;
+                    }
+                    if (block.getClass() == Factory.class) {
+                        block = (Factory) block;
+                    }
+                    if (block.getClass() == Restaurant.class) {
+                        block = (Restaurant) block;
+                    }
+                    if (block.getClass() == SuperMarket.class) {
+                        block = (SuperMarket) block;
+                    }
+                    if (block.getClass() == Entertainment.class) {
+                        block = (Entertainment) block;
+                    }
+                    if (avatar.getUserID() == block.getOwnerID()) {
+                        block.OwnerMenu(avatar);
+                    } else {
+                        System.out.println(1);
+                        block.customerMenu(avatar);
+                    }
+                });
+
+            }
+
+        infoLabel.setText("health = "+avatar.getHealth()+" food = "+avatar.getFood()+" drink = "+avatar.getDrink()+" happiness = "+avatar.getHappiness()+" money = "+avatar.getMoney());
 
 
     }
 
     public void menu(Stage window,Avatar avatar){
-        Button[] buttons = new Button[48];
-        for(int i =0;i<48;i++){
-            final int j = i;
-            buttons[i]= new Button("button "+i);
-            buttons[i].setMinHeight(50);
-            Block block1 = this.getBlocks().get(j);
+        timeSkip();
+        GridPane layout = new GridPane();
+        layout.setAlignment(Pos.CENTER);
+        if(avatar.getAlive()) {
+            for (int i = 0; i < 48; i++) {
+                final int j = i;
 
-            if(block1.getClass()==Bank.class){
-            }
-            if(block1.getClass()==Casino.class){
-            }
-            if(block1.getClass()==DrugStore.class){
-            }
-            if(block1.getClass()==Factory.class){
-            }
-            if(block1.getClass()==Restaurant.class){
-            }
-            if(block1.getClass()==SuperMarket.class){
-            }
-            if(block1.getClass()==Entertainment.class){
-            }
+                buttons[i] = new Button();
+                buttons[i].setMinHeight(50);
+                Block block1 = this.getBlocks().get(j);
+                ImageView imageView = new ImageView(Heaven.blockImage);
+                buttons[i].setGraphic(imageView);
+                if (block1.getClass() == Bank.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Casino.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == DrugStore.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Factory.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Restaurant.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == SuperMarket.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
+                if (block1.getClass() == Entertainment.class) {
+                    ImageView imageView1 = new ImageView(Heaven.bankImage);
+                    buttons[i].setGraphic(imageView1);
+                }
 
-                buttons[i].setOnAction(e ->{
+                buttons[i].setOnAction(e -> {
                     Block block = this.getBlocks().get(j);
-                    if(block.getClass()==Bank.class){
-                        block = (Bank)block;
+                    if (block.getClass() == Bank.class) {
+                        block = (Bank) block;
                     }
-                    if(block.getClass()==Casino.class){
-                        block = (Casino)block;
+                    if (block.getClass() == Casino.class) {
+                        block = (Casino) block;
                     }
-                    if(block.getClass()==DrugStore.class){
-                        block = (DrugStore)block;
+                    if (block.getClass() == DrugStore.class) {
+                        block = (DrugStore) block;
                     }
-                    if(block.getClass()==Factory.class){
-                        block = (Factory)block;
+                    if (block.getClass() == Factory.class) {
+                        block = (Factory) block;
                     }
-                    if(block.getClass()==Restaurant.class){
-                        block = (Restaurant)block;
+                    if (block.getClass() == Restaurant.class) {
+                        block = (Restaurant) block;
                     }
-                    if(block.getClass()==SuperMarket.class){
-                        block = (SuperMarket)block;
+                    if (block.getClass() == SuperMarket.class) {
+                        block = (SuperMarket) block;
                     }
-                    if(block.getClass()==Entertainment.class){
-                        block = (Entertainment)block;
+                    if (block.getClass() == Entertainment.class) {
+                        block = (Entertainment) block;
                     }
-                    if(avatar.getUserID()==block.getOwnerID()){
+                    if (avatar.getUserID() == block.getOwnerID()) {
                         block.OwnerMenu(avatar);
-                    }else{
+                    } else {
+                        System.out.println(1);
                         block.customerMenu(avatar);
                     }
                 });
 
+            }
+            int i = 0;
+
+            layout.add(buttons[i++], 0, 0);
+            layout.add(buttons[i++], 7, 0);
+            layout.add(buttons[i++], 14, 0);
+            layout.add(buttons[i++], 2, 2);
+            layout.add(buttons[i++], 6, 2);
+            layout.add(buttons[i++], 8, 2);
+            layout.add(buttons[i++], 12, 2);
+            layout.add(buttons[i++], 3, 3);
+            layout.add(buttons[i++], 5, 3);
+            layout.add(buttons[i++], 9, 3);
+            layout.add(buttons[i++], 11, 3);
+            layout.add(buttons[i++], 4, 4);
+            layout.add(buttons[i++], 10, 4);
+            layout.add(buttons[i++], 3, 5);
+            layout.add(buttons[i++], 6, 5);
+            layout.add(buttons[i++], 8, 5);
+            layout.add(buttons[i++], 11, 5);
+            layout.add(buttons[i++], 2, 6);
+            layout.add(buttons[i++], 5, 6);
+            layout.add(buttons[i++], 7, 6);
+            layout.add(buttons[i++], 9, 6);
+            layout.add(buttons[i++], 12, 6);
+            layout.add(buttons[i++], 0, 7);
+            layout.add(buttons[i++], 6, 7);
+            layout.add(buttons[i++], 8, 7);
+            layout.add(buttons[i++], 14, 7);
+            layout.add(buttons[i++], 2, 8);
+            layout.add(buttons[i++], 5, 8);
+            layout.add(buttons[i++], 7, 8);
+            layout.add(buttons[i++], 9, 8);
+            layout.add(buttons[i++], 12, 8);
+            layout.add(buttons[i++], 3, 9);
+            layout.add(buttons[i++], 6, 9);
+            layout.add(buttons[i++], 8, 9);
+            layout.add(buttons[i++], 11, 9);
+            layout.add(buttons[i++], 4, 10);
+            layout.add(buttons[i++], 10, 10);
+            layout.add(buttons[i++], 3, 11);
+            layout.add(buttons[i++], 5, 11);
+            layout.add(buttons[i++], 9, 11);
+            layout.add(buttons[i++], 11, 11);
+            layout.add(buttons[i++], 2, 12);
+            layout.add(buttons[i++], 6, 12);
+            layout.add(buttons[i++], 8, 12);
+            layout.add(buttons[i++], 12, 12);
+            layout.add(buttons[i++], 0, 14);
+            layout.add(buttons[i++], 7, 14);
+            layout.add(buttons[i++], 14, 14);
+        }else{
+            Label deathLabel = new Label("YOU ARE DEAD");
+            layout.add(deathLabel,0,0);
         }
-        int i=0;
-        GridPane layout = new GridPane();
-        layout.add(buttons[i++],0,0);
-        layout.add(buttons[i++],7,0);
-        layout.add(buttons[i++],14,0);
-        layout.add(buttons[i++],2,2);
-        layout.add(buttons[i++],6,2);
-        layout.add(buttons[i++],8,2);
-        layout.add(buttons[i++],12,2);
-        layout.add(buttons[i++],3,3);
-        layout.add(buttons[i++],5,3);
-        layout.add(buttons[i++],9,3);
-        layout.add(buttons[i++],11,3);
-        layout.add(buttons[i++],4,4);
-        layout.add(buttons[i++],10,4);
-        layout.add(buttons[i++],3,5);
-        layout.add(buttons[i++],6,5);
-        layout.add(buttons[i++],8,5);
-        layout.add(buttons[i++],11,5);
-        layout.add(buttons[i++],2,6);
-        layout.add(buttons[i++],5,6);
-        layout.add(buttons[i++],7,6);
-        layout.add(buttons[i++],9,6);
-        layout.add(buttons[i++],12,6);
-        layout.add(buttons[i++],0,7);
-        layout.add(buttons[i++],6,7);
-        layout.add(buttons[i++],8,7);
-        layout.add(buttons[i++],14,7);
-        layout.add(buttons[i++],2,8);
-        layout.add(buttons[i++],5,8);
-        layout.add(buttons[i++],7,8);
-        layout.add(buttons[i++],9,8);
-        layout.add(buttons[i++],12,8);
-        layout.add(buttons[i++],3,9);
-        layout.add(buttons[i++],6,9);
-        layout.add(buttons[i++],8,9);
-        layout.add(buttons[i++],11,9);
-        layout.add(buttons[i++],4,10);
-        layout.add(buttons[i++],10,10);
-        layout.add(buttons[i++],3,11);
-        layout.add(buttons[i++],5,11);
-        layout.add(buttons[i++],9,11);
-        layout.add(buttons[i++],11,11);
-        layout.add(buttons[i++],2,12);
-        layout.add(buttons[i++],6,12);
-        layout.add(buttons[i++],8,12);
-        layout.add(buttons[i++],12,12);
-        layout.add(buttons[i++],0,14);
-        layout.add(buttons[i++],7,14);
-        layout.add(buttons[i++],14,14);
         layout.setHgap(3);
         layout.setVgap(3);
-        Scene scene = new Scene(layout);
+
+        VBox vBox= new VBox();
+        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.setSpacing(5);
+        HBox hBox = new HBox();
+        HBox hBox1 = new HBox();
+        HBox hBox2 = new HBox();
+        hBox1.setAlignment(Pos.TOP_LEFT);
+        hBox2.setAlignment(Pos.TOP_RIGHT);
+        hBox.getChildren().addAll(hBox1,hBox2);
+         infoLabel = new Label("health = "+avatar.getHealth()+" food = "+avatar.getFood()+" drink = "+avatar.getDrink()+" happiness = "+avatar.getHappiness()+" money = "+avatar.getMoney());
+        hBox1.getChildren().add(infoLabel);
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e ->Heaven.menu(window));
+        hBox2.getChildren().add(backButton);
+
+        hBox.setSpacing(900);
+        vBox.getChildren().addAll(hBox,layout);
+        Scene scene = new Scene(vBox);
         window.setScene(scene);
 
 
+
+    }
+    public static void timeSkip(){
+            for(LightCity city : Heaven.getCities()){
+                long dayDiff = city.dayCounter()-city.dayNumber;
+                city.dayNumber = city.dayCounter();
+                while(dayDiff>=8){
+                    dayDiff-=8;
+                    city.timeJustSkipped();
+
+                }
+
+            }
+    }
+    public void timeJustSkipped(){
+        for(Avatar avatar: this.getAvatars()){
+            if(avatar.getEmployed()){
+                avatar.setMoney(avatar.getMoney()+avatar.getEmployer().getSalary());
+                avatar.getEmployer().getOwner().setMoney(avatar.getEmployer().getOwner().getMoney()-avatar.getEmployer().getSalary());
+            }
+            avatar.setDrink(avatar.getDrink()-10);
+            avatar.setFood(avatar.getFood()-5);
+            avatar.setHealth(avatar.getHealth()-2);
+            if(avatar.getEmployed()){
+                avatar.setHappiness(avatar.getHappiness()-6);
+            }else{
+                avatar.setHappiness(avatar.getHappiness()-2);
+            }
+            if(avatar.getDrink()<1){
+                avatar.setHealth(avatar.getHealth()-10);
+            }
+            if (avatar.getFood()<1){
+                avatar.setHealth(avatar.getHealth()-5);
+            }
+            avatar.checkDeath();
+        }
+        for(Block block : this.getBlocks()){
+            try {
+                block.getOwner().setMoney(block.getIncome());
+
+            }catch (Exception e){
+
+            }
+        }
+    }
+    public long dayCounter(){
+        return ((new Timestamp(new Date().getTime()).getTime()-this.getStartTime().getTime())/(60*60*1000));
 
     }
 

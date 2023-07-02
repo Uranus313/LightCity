@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -134,21 +135,30 @@ public class Block {
         buyButton.setOnAction(e ->this.buyProperty(window,avatar));
         Button getInfoButton = new Button("property info");
         getInfoButton.setOnAction(e-> propertyInfo(window,avatar));
+        Button joinButton = new Button("join this company");
+        if(this.getClass()==Block.class){
+            joinButton.setOnAction(e -> AlertBox.display("cant","you cant join an empty block"));
+        }else {
+            joinButton.setOnAction(e -> join(avatar));
+        }
+
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> window.close());
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10));
         vBox.setSpacing(10);
-        vBox.getChildren().addAll(welcomeLabel,getInfoButton,buyButton);
+        vBox.getChildren().addAll(welcomeLabel,getInfoButton,buyButton,joinButton);
         Scene scene = new Scene(vBox);
         window.setScene(scene);
+        window.show();
+        window.setOnCloseRequest(e -> this.getCity().reload(avatar));
 
     }
     public void OwnerMenu(Avatar avatar){
         Stage window = new Stage();
         Label welcomeLabel = new Label("welcome to "+ this.name);
         Button getInfoButton = new Button("property info");
-        getInfoButton.setOnAction(e-> propertyInfo(window,avatar));
+        getInfoButton.setOnAction(e-> propertyInfo2(window,avatar));
         Button changeInfoButton = new Button("change property details");
         changeInfoButton.setOnAction(e -> this.changeInfo(window,avatar));
         Button upgradeButton = new Button("upgrade property");
@@ -158,9 +168,12 @@ public class Block {
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10));
         vBox.setSpacing(10);
-        vBox.getChildren().addAll(welcomeLabel,getInfoButton,changeInfoButton);
+        vBox.getChildren().addAll(welcomeLabel,getInfoButton,changeInfoButton,upgradeButton);
         Scene scene = new Scene(vBox);
         window.setScene(scene);
+        window.show();
+        window.setOnCloseRequest(e -> this.getCity().reload(avatar));
+
 
     }
     public void propertyInfo(Stage window,Avatar avatar){
@@ -174,9 +187,58 @@ public class Block {
         Label currentPrice = new Label(Long.toString(this.getPrice()));
         Label currentBaseIncome = new Label(Long.toString(this.getIncome()));
         Label currentEmployeeCount = new Label(Long.toString(this.getEmployees().size()));
-        Label currentOwner = new Label(this.getOwner().getName());
+        Label currentOwner = new Label("free");
+        if(this.getOwner()!=null) {
+            currentOwner.setText(this.getOwner().getName());
+        }
         Button backButton = new Button("Back");
-       // backButton.setOnAction(e -> userMenu());
+        backButton.setOnAction(e -> {
+            window.close();
+            this.customerMenu(avatar);
+        });
+        GridPane layout = new GridPane();
+        layout.setVgap(10);
+        layout.setHgap(10);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(10));
+        layout.add(welcomeLabel,0,0);
+        layout.add(nameLabel,0,1);
+        layout.add(priceLabel,0,2);
+        layout.add(baseIncomeLabel,0,3);
+        layout.add(employeeCountLabel,0,4);
+        layout.add(ownerLabel,0,5);
+        layout.add(currentName,1,1);
+        layout.add(currentPrice,1,2);
+        layout.add(currentBaseIncome,1,3);
+        layout.add(currentEmployeeCount,1,4);
+        layout.add(currentOwner,1,5);
+        layout.add(backButton,0,6);
+        Scene scene= new Scene(layout);
+        window.setScene(scene);
+
+
+
+    }
+    public void propertyInfo2(Stage window,Avatar avatar){
+        Label welcomeLabel = new Label("Property Info");
+        Label nameLabel = new Label("name :");
+        Label priceLabel = new Label("price :");
+        Label baseIncomeLabel = new Label("base income :");
+        Label employeeCountLabel = new Label("employee count :");
+        Label ownerLabel = new Label("owner :");
+        Label currentName = new Label(this.getName());
+        Label currentPrice = new Label(Long.toString(this.getPrice()));
+        Label currentBaseIncome = new Label(Long.toString(this.getIncome()));
+        Label currentEmployeeCount = new Label(Long.toString(this.getEmployees().size()));
+        Label currentOwner = new Label("free");
+        if(this.getOwner()!=null) {
+            currentOwner.setText(this.getOwner().getName());
+        }
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> {
+            window.close();
+            this.OwnerMenu(avatar);
+        });
         GridPane layout = new GridPane();
         layout.setVgap(10);
         layout.setHgap(10);
@@ -231,6 +293,7 @@ public class Block {
         casinoButton.setOnAction(e -> {
             if(Bank.checkMoney(avatar,null,this.getCity().getCasinoPrice())){
                 Casino newBorn = new Casino(this.getName(),this.getCity().getCasinoIncome(),this.getCity().getCasinoPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
+                this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
@@ -240,6 +303,7 @@ public class Block {
         drugStoreButton.setOnAction(e -> {
             if(Bank.checkMoney(avatar,null,this.getCity().getDrugStorePrice())){
                 DrugStore newBorn = new DrugStore(this.getName(),this.getCity().getDrugStoreIncome(),this.getCity().getDrugStorePrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
+                this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
@@ -249,33 +313,37 @@ public class Block {
         entertainmentButton.setOnAction(e -> {
             if(Bank.checkMoney(avatar,null,this.getCity().getEntertainmentPrice())){
                 Entertainment newBorn = new Entertainment(this.getName(),this.getCity().getEntertainmentIncome(),this.getCity().getEntertainmentPrice(),this.getSalary(),this.getOwnerID(),this.getID()-1,this.getCityID());
+                this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
         });
         Button factoryButton = new Button("Build factory");
-        casinoButton.setOnAction(e -> {
+        factoryButton.setOnAction(e -> {
             if(Bank.checkMoney(avatar,null,this.getCity().getFactoryPrice())){
                 Factory newBorn = new Factory(this.getName(),this.getCity().getFactoryIncome(), this.getCity().getFactoryPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
+                this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
         });
         Button restaurantButton = new Button("Build restaurant");
-        casinoButton.setOnAction(e -> {
+        restaurantButton.setOnAction(e -> {
             if(Bank.checkMoney(avatar,null,this.getCity().getRestaurantPrice())){
                 Restaurant newBorn = new Restaurant(this.getName(),this.getCity().getRestaurantIncome(),this.getCity().getRestaurantPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
+                this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
         });
         Button superMarketButton = new Button("Build super market");
-        casinoButton.setOnAction(e -> {
+        superMarketButton.setOnAction(e -> {
             if(Bank.checkMoney(avatar,null,this.getCity().getSuperMarketPrice())){
                 SuperMarket newBorn = new SuperMarket(this.getName(),this.getCity().getSuperMarketIncome(),this.getCity().getSuperMarketPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
+                this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
@@ -331,12 +399,20 @@ public class Block {
             try{
                 avatar.setMoney(avatar.getMoney()-this.getPrice());
                 this.getOwner().setMoney(this.getOwner().getMoney()+this.getPrice());
+                System.out.println(5);
                 this.setOwnerID(avatar.getID());
+                System.out.println(6);
                 AlertBox.display("success","this property is yours");
                 this.OwnerMenu(avatar);
                 window.close();
                 return;
             }catch (Exception e){
+                System.out.println(5);
+                this.setOwnerID(avatar.getID());
+                System.out.println(6);
+                AlertBox.display("success","this property is yours");
+                this.OwnerMenu(avatar);
+                window.close();
                 return;
             }
         }
@@ -379,7 +455,10 @@ public class Block {
             }
         });
         Button backButton = new Button("Back");
-        backButton.setOnAction(e ->this.OwnerMenu(avatar));
+        backButton.setOnAction(e -> {
+            window.close();
+            this.OwnerMenu(avatar);
+        });
         GridPane layout = new GridPane();
         layout.setVgap(10);
         layout.setHgap(10);
@@ -403,6 +482,7 @@ public class Block {
         }else{
             avatar.setEmployerID(this.getID());
             avatar.setEmployed(true);
+            AlertBox.display("employed","you successfully joined this corporation");
         }
     }
 

@@ -67,12 +67,16 @@ public class Shop extends Block{
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> window.close());
         Button buyItemButton = new Button("buy Items");
+        buyItemButton.setOnAction(e -> buyItem(window,avatar));
+        Button joinButton = new Button("join this company");
+            joinButton.setOnAction(e -> join(avatar));
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10));
         vBox.setSpacing(10);
-        vBox.getChildren().addAll(welcomeLabel,getInfoButton,buyItemButton,buyButton);
+        vBox.getChildren().addAll(welcomeLabel,getInfoButton,buyItemButton,buyButton,joinButton);
         Scene scene = new Scene(vBox);
         window.setScene(scene);
+        window.show();
 
     }
     public void OwnerMenu(Avatar avatar){
@@ -92,6 +96,8 @@ public class Shop extends Block{
         vBox.getChildren().addAll(welcomeLabel,getInfoButton,changeInfoButton,changeItemButton);
         Scene scene = new Scene(vBox);
         window.setScene(scene);
+        window.show();
+        window.setOnCloseRequest(e -> this.getCity().reload(avatar));
 
     }
     public void changeItemPrice(Stage window, Avatar avatar){
@@ -133,7 +139,7 @@ public class Shop extends Block{
             try{
                 if(!item3Field.getText().isEmpty() && Long.parseLong(item3Field.getText())!=this.getPrice()){
                     this.setItem3Price(Long.parseLong(item3Field.getText()));
-                    AlertBox.display("success","level 1 item's price has successfully changed\n" +
+                    AlertBox.display("success","level 3 item's price has successfully changed\n" +
                             "enter 0 to make it unbuyable ");
                 }
 
@@ -143,7 +149,7 @@ public class Shop extends Block{
             try{
                 if(!item4Field.getText().isEmpty() && Long.parseLong(item4Field.getText())!=this.getPrice()){
                     this.setItem4Price(Long.parseLong(item4Field.getText()));
-                    AlertBox.display("success","level 1 item's price has successfully changed\n" +
+                    AlertBox.display("success","level 4 item's price has successfully changed\n" +
                             "enter 0 to make it unbuyable ");
                 }
 
@@ -152,7 +158,9 @@ public class Shop extends Block{
             }
         });
         Button backButton = new Button("Back");
-        backButton.setOnAction(e ->this.OwnerMenu(avatar));
+        backButton.setOnAction(e ->{this.OwnerMenu(avatar);
+        window.close();
+        });
         GridPane layout = new GridPane();
         layout.setVgap(10);
         layout.setHgap(10);
@@ -171,6 +179,7 @@ public class Shop extends Block{
         layout.add(submitButton,1,5);
         Scene scene = new Scene(layout);
         window.setScene(scene);
+        window.setOnCloseRequest(e -> this.getCity().reload(avatar));
     }
     public void buyItem(Stage window, Avatar avatar){}
 }

@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     private int ID;
@@ -278,17 +279,24 @@ public class User {
         submitButton.setOnAction(e -> {
             try {
                 if(nameField.getText().isEmpty()){
+                    System.out.println(1);
                     throw new Exception();
                 }
+
                 for (Avatar avatar : city.getAvatars()) {
                     if(avatar.getName().equals(nameField.getText())){
+                        System.out.println(2);
                         throw new Exception();
                     }
                 }
                 Avatar avatar =new Avatar(nameField.getText(),this.getID(),city.getID(), Gender.valueOf(genderBox.getValue()),Race.valueOf(raceBox.getValue()));
+
+                System.out.println(1);
                 city.getAvatars().add(avatar);
+                System.out.println(2);
                 city.menu(window,avatar);
             }catch (Exception c){
+                System.out.println(c);
                 AlertBox.display("fail","this name is already taken");
             }
         });

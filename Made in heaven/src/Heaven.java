@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -11,14 +12,33 @@ import javafx.stage.Window;
 
 import java.util.ArrayList;
 
+
 public class Heaven {
+    public static Image bankImage;
+    public static Image blockImage;
+    public static Image casinoImage;
+    public static Image drugStoreImage;
+    public static Image entertainmentImage;
+    public static Image factoryImage;
+    public static Image restaurantImage;
+    public static Image superMarketImage;
+
     private static ArrayList<LightCity> cities;
     private static ArrayList<User> users;
     Heaven(){
+         bankImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Bank.png");
+         blockImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Block2.png");
+         casinoImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Casino.png");
+         drugStoreImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\DrugStore.png");
+         entertainmentImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\entertainment.png");
+         factoryImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Factory.png");
+         restaurantImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Restaurant.png");
+         superMarketImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\SuperMarket.png");
         cities = new ArrayList<>();
         users = new ArrayList<>();
     }
     public static void menu(Stage window){
+        LightCity.timeSkip();
         VBox layout = new VBox();
         layout.setPadding(new Insets(10));
         layout.setSpacing(10);

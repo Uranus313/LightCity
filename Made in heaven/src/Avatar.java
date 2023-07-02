@@ -5,7 +5,7 @@ public class Avatar {
     private Boolean Alive= true;
     private Boolean employed= false;
     private long employerID=0;
-    private long money=1000;
+    private long money=100000;
     private int health=80;
     private int happiness=80;
     private int food=100;
@@ -45,6 +45,11 @@ public class Avatar {
         this.cityID = cityID;
         this.gender = gender;
         this.race = race;
+    }
+    public void checkDeath(){
+        if(health<1 || happiness<1){
+            this.setAlive(false);
+        }
     }
 
     public LightCity getCity(){

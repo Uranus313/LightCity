@@ -18,7 +18,7 @@ public class Casino extends Shop{
     }
     public void buyItem(Stage window, Avatar avatar){
         Label welcomeLabel = new Label("play your games");
-        Label item1Label = new Label("high chance,entry = "+getItem1Price()+",prize = "+getItem1Price()*1.5);
+        Label item1Label = new Label("high chance,entry = "+getItem1Price()+",prize = "+getItem1Price()*0.5);
         Button item1Button = new Button("Coin flip");
         Label item2Label = new Label("medium chance, price = "+getItem2Price()+",prize = "+getItem2Price()*3);
         Button item2Button = new Button("Slot machine");
