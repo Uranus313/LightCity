@@ -6,7 +6,7 @@ public class Database {
 
     private static final String url = "jdbc:mysql://localhost:3306/lightcity";
     private static final String user = "root";
-    private static final String pass = "@Javadss3";
+    private static final String pass = "@Mm12345678";
 
 
 
@@ -85,7 +85,7 @@ public class Database {
         try {
             Connection connection = DriverManager.getConnection(url, user, pass);
 
-            String sql = " delete from " + table + " where useId =? AND cityId =?";
+            String sql = " delete from " + table + " where id =? AND cityId =?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, userId);
             ps.setLong(2, cityId);
@@ -98,8 +98,8 @@ public class Database {
 
     }
 
-    public static List<Avatar> popAvatars() {
-        List<Avatar> avatars = new ArrayList<>();
+    public static ArrayList<Avatar> popAvatars() {
+        ArrayList<Avatar> avatars = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -133,8 +133,8 @@ public class Database {
         return avatars;
     }
 
-    public static List<LightCity> popLightCities() {
-        List<LightCity> lightCities = new ArrayList<>();
+    public static ArrayList<LightCity> popLightCities() {
+        ArrayList<LightCity> lightCities = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -175,8 +175,8 @@ public class Database {
         return lightCities;
     }
 
-    public static List<Block> popBlocks() {
-        List<Block> blocks = new ArrayList<>();
+    public static ArrayList<Block> popBlocks() {
+        ArrayList<Block> blocks = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -202,8 +202,8 @@ public class Database {
         return blocks;
     }
 
-    public static List<Factory> popFactories() {
-        List<Factory> factories = new ArrayList<>();
+    public static ArrayList<Factory> popFactories() {
+        ArrayList<Factory> factories = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -229,8 +229,8 @@ public class Database {
         return factories;
     }
 
-    public static List<Casino> popCasinos() {
-        List<Casino> casinos = new ArrayList<>();
+    public static ArrayList<Casino> popCasinos() {
+        ArrayList<Casino> casinos = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -256,8 +256,8 @@ public class Database {
         return casinos;
     }
 
-    public static List<DrugStore> popDrugStores() {
-        List<DrugStore> drugStores = new ArrayList<>();
+    public static ArrayList<DrugStore> popDrugStores() {
+        ArrayList<DrugStore> drugStores = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -288,8 +288,8 @@ public class Database {
         return drugStores;
     }
 
-    public static List<Entertainment> popEntertainments() {
-        List<Entertainment> entertainments = new ArrayList<>();
+    public static ArrayList<Entertainment> popEntertainments() {
+        ArrayList<Entertainment> entertainments = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -321,8 +321,8 @@ public class Database {
     }
 
 
-    public static List<Restaurant> popRestaurants() {
-        List<Restaurant> restaurants = new ArrayList<>();
+    public static ArrayList<Restaurant> popRestaurants() {
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -353,8 +353,8 @@ public class Database {
         return restaurants;
     }
 
-    public static List<SuperMarket> popSuperMarkets() {
-        List<SuperMarket> superMarkets = new ArrayList<>();
+    public static ArrayList<SuperMarket> popSuperMarkets() {
+        ArrayList<SuperMarket> superMarkets = new ArrayList<>();
         try {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -385,8 +385,8 @@ public class Database {
         return superMarkets;
     }
 
-    public static List<User> popUsers() {
-        List<User> users = new ArrayList<>();
+    public static ArrayList<User> popUsers() {
+        ArrayList<User> users = new ArrayList<>();
 
         try {
 
@@ -505,10 +505,10 @@ public class Database {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
 
-            String sql = " insert into block (name, password, id, blockPrice, bankPrice, superMarketPrice, drugStorePrice," +
+            String sql = " insert into lightcity (name, password, id, blockPrice, bankPrice, superMarketPrice, drugStorePrice," +
                     " entertainmentPrice , restaurantPrice, casinoPrice, factoryPrice, bankIncome, superMarketIncome, drugStoreIncome, " +
-                    "entertainmentIncome, casinoIncome, factoryIncome, dayNumber, startTime)"
-                    + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "entertainmentIncome,restaurantIncome, casinoIncome, factoryIncome, dayNumber, startTime)"
+                    + " values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, lightCity.getName());
@@ -548,7 +548,7 @@ public class Database {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
 
-            String sql = " insert into avatar (name, income, price, salary, ownerId, id, cityId, item1price, item2price, item3price, item4price)"
+            String sql = " insert into casino (name, income, price, salary, ownerId, id, cityId, item1price, item2price, item3price, item4price)"
                     + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = connection.prepareStatement(sql);
 
@@ -577,7 +577,7 @@ public class Database {
 
             Connection connection = DriverManager.getConnection(url, user, pass);
 
-            String sql = " insert into drug_store (name, income, price, salary, ownerId, id, cityId, item1price, item2price, item3price, item4price)"
+            String sql = " insert into drugstore (name, income, price, salary, ownerId, id, cityId, item1price, item2price, item3price, item4price)"
                     + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = connection.prepareStatement(sql);
 
