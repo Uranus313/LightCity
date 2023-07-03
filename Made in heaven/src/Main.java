@@ -10,8 +10,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.*;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
@@ -34,8 +37,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
-//       new Heaven();
-//     Heaven.menu(window);
+       new Heaven();
+       Heaven.loadAll();
+
+     Heaven.menu(window);
+
         // Button[] buttons = new Button[48];
         // VBox vBox = new VBox();
         // vBox.setAlignment(Pos.TOP_CENTER);
@@ -130,11 +136,29 @@ public class Main extends Application {
 
 
 
+    public static void createKey() throws NoSuchAlgorithmException{
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+        kpg.initialize(2048);
+        KeyPair kp = kpg.generateKeyPair();
+        PrivateKey aPrivate = kp.getPrivate();
+        PublicKey aPubic = kp.getPublic();
+        try(FileOutputStream outPrivate = new FileOutputStream("key.priv")){
+            outPrivate.write(aPrivate.getEncoded());
 
+        }catch (IOException e){
+            System.out.println(e);
+        }
+        try (FileOutputStream outPublic = new FileOutputStream("key.pub")){
+            outPublic.write(aPubic.getEncoded());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
     private static PublicKey loadPublicKey() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 
-        byte[] publicKeyBytes = Objects.requireNonNull(Main.class.getResourceAsStream("/key.pub")).readAllBytes();
+        File publicKeyFile = new File("key.pub");
+        byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
 
         KeyFactory publicKeyFactory = KeyFactory.getInstance("RSA");
         EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
@@ -157,7 +181,9 @@ public class Main extends Application {
 
     private static PrivateKey loadPrivateKey() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 
-        byte[] privateKeyBytes = Objects.requireNonNull(Main.class.getResourceAsStream("/key.priv")).readAllBytes();
+
+        File privateKeyFile = new File("key.priv");
+        byte[] privateKeyBytes = Files.readAllBytes(privateKeyFile.toPath());
 
         KeyFactory privateKeyFactory = KeyFactory.getInstance("RSA");
         EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
