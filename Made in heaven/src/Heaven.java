@@ -25,6 +25,8 @@ public class Heaven {
 
     private static ArrayList<LightCity> cities;
     private static ArrayList<User> users;
+    private static ArrayList<Block> blocks;
+    private static ArrayList<Avatar> avatars;
     Heaven(){
          bankImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Bank.png");
          blockImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\Block2.png");
@@ -36,6 +38,41 @@ public class Heaven {
          superMarketImage = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\SuperMarket.png");
         cities = new ArrayList<>();
         users = new ArrayList<>();
+        blocks = new ArrayList<>();
+    }
+    public static void loadAll(){
+        users = Database.popUsers();
+        blocks = Database.popBlocks();
+        for (Casino block : Database.popCasinos()){
+            blocks.add(block);
+        }
+        for (DrugStore block : Database.popDrugStores()){
+            blocks.add(block);
+        }
+        for (Entertainment block : Database.popEntertainments()){
+            blocks.add(block);
+        }
+        for (Factory block : Database.popFactories()){
+            blocks.add(block);
+        }
+        for (Restaurant block : Database.popRestaurants()){
+            blocks.add(block);
+        }
+        for (SuperMarket block : Database.popSuperMarkets()){
+            blocks.add(block);
+        }
+        avatars = Database.popAvatars();
+        cities = Database.popLightCities();
+        if(cities.size()>0) {
+            System.out.println(cities.size());
+            LightCity.setIDCreator(cities.size()+1);
+        }
+        if(users.size()>0){
+            User.setIDCreator(users.get(users.size()-1).getID() +1);
+        }
+        if(avatars.size()>0){
+            Avatar.setIDCreator(avatars.get(avatars.size()-1).getID() +1);
+        }
     }
     public static void menu(Stage window){
         LightCity.timeSkip();
@@ -86,6 +123,7 @@ public class Heaven {
             }
                 if(checker){
                     User newUser = new User(userNameField.getText(),passwordField.getText());
+                    Database.insertData(newUser);
                     users.add(newUser);
                     newUser.menu(window);
                 }else{
@@ -142,6 +180,30 @@ public class Heaven {
 
 
 
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public static void setUsers(ArrayList<User> users) {
+        Heaven.users = users;
+    }
+
+    public static ArrayList<Block> getBlocks() {
+        return blocks;
+    }
+
+    public static void setBlocks(ArrayList<Block> blocks) {
+        Heaven.blocks = blocks;
+    }
+
+    public static ArrayList<Avatar> getAvatars() {
+        return avatars;
+    }
+
+    public static void setAvatars(ArrayList<Avatar> avatars) {
+        Heaven.avatars = avatars;
     }
 
     public static ArrayList<LightCity> getCities() {

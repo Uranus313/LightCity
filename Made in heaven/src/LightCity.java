@@ -2,10 +2,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.sql.Timestamp;
@@ -47,10 +46,13 @@ public class LightCity {
         blocks= new ArrayList<>();
         users= new ArrayList<>();
         avatars = new ArrayList<>();
-;
+
         this.ID=IDCreator;
+        System.out.println(ID);
         for(int i=0;i<48;i++){
-            this.getBlocks().add(new Block("block "+i,blockPrice,this.getID()));
+            Block block = new Block("block "+i,blockPrice,this.getID());
+            this.getBlocks().add(block);
+            Database.insertData(block);
         }
         IDCreator++;
         startTime = new Timestamp(new Date().getTime());
@@ -85,7 +87,19 @@ public class LightCity {
         blocks= new ArrayList<>();
         users= new ArrayList<>();
         avatars = new ArrayList<>();
-
+        for(int i=0;i<48;i++){
+            for(Block block : Heaven.getBlocks()){
+                if(block.getCityID()==this.getID() && block.getID()==i){
+                    System.out.println(block.getID());
+                    this.getBlocks().add(block);
+                }
+            }
+        }
+        for(Avatar avatar : Heaven.getAvatars()){
+            if(avatar.getCity()==this){
+                this.getAvatars().add(avatar);
+            }
+        }
     }
 
     public LightCity(String name, String passWord, long blockPrice, long bankPrice, long superMarketPrice,
@@ -113,7 +127,9 @@ public class LightCity {
         IDCreator++;
         startTime = new Timestamp(new Date().getTime());
         for(int i=0;i<48;i++){
-            this.getBlocks().add(new Block("block "+i,blockPrice,this.getID()));
+            Block block = new Block("block "+i,blockPrice,this.getID());
+            this.getBlocks().add(block);
+            Database.insertData(block);
         }
         blocks= new ArrayList<>();
         users= new ArrayList<>();
@@ -121,6 +137,10 @@ public class LightCity {
     }
     public void reload(Avatar avatar){
         timeSkip();
+        Database.deleteData("avatar",avatar.getID(),this.getID());
+        Database.insertData(avatar);
+        System.out.println(blocks.get(0).getOwnerID());
+        System.out.println(avatar.getID());
             for (int i = 0; i < 48; i++) {
                 final int j = i;
                 Block block1 = this.getBlocks().get(j);
@@ -129,31 +149,40 @@ public class LightCity {
                 if (block1.getClass() == Bank.class) {
                     ImageView imageView1 = new ImageView(Heaven.bankImage);
                     buttons[i].setGraphic(imageView1);
-                }
+                }else
                 if (block1.getClass() == Casino.class) {
                     ImageView imageView1 = new ImageView(Heaven.casinoImage);
+
                     buttons[i].setGraphic(imageView1);
-                }
+                }else
                 if (block1.getClass() == DrugStore.class) {
                     ImageView imageView1 = new ImageView(Heaven.drugStoreImage);
+
                     buttons[i].setGraphic(imageView1);
-                }
+                }else
                 if (block1.getClass() == Factory.class) {
                     ImageView imageView1 = new ImageView(Heaven.factoryImage);
+
                     buttons[i].setGraphic(imageView1);
-                }
+                }else
                 if (block1.getClass() == Restaurant.class) {
                     ImageView imageView1 = new ImageView(Heaven.restaurantImage);
+
                     buttons[i].setGraphic(imageView1);
-                }
+                }else
                 if (block1.getClass() == SuperMarket.class) {
                     ImageView imageView1 = new ImageView(Heaven.superMarketImage);
+
                     buttons[i].setGraphic(imageView1);
-                }
+                }else
                 if (block1.getClass() == Entertainment.class) {
                     ImageView imageView1 = new ImageView(Heaven.entertainmentImage);
                     buttons[i].setGraphic(imageView1);
+                }else {
+                    Database.deleteData("block",block1.getID(),this.getID());
+                    Database.insertData(block1);
                 }
+
 
                 buttons[i].setOnAction(e -> {
                     Block block = this.getBlocks().get(j);
@@ -162,23 +191,36 @@ public class LightCity {
                     }
                     if (block.getClass() == Casino.class) {
                         block = (Casino) block;
+                        Database.deleteData("casino",block.getID(),this.getID());
+                        Database.insertData(block);
                     }
                     if (block.getClass() == DrugStore.class) {
                         block = (DrugStore) block;
+                        Database.deleteData("drugstore",block.getID(),this.getID());
+                        Database.insertData(block);
                     }
                     if (block.getClass() == Factory.class) {
                         block = (Factory) block;
+                        Database.deleteData("factory",block.getID(),this.getID());
+                        Database.insertData(block);
                     }
                     if (block.getClass() == Restaurant.class) {
                         block = (Restaurant) block;
+                        Database.deleteData("restaurant",block.getID(),this.getID());
+                        Database.insertData(block);
                     }
                     if (block.getClass() == SuperMarket.class) {
                         block = (SuperMarket) block;
+                        Database.deleteData("supermarket",block.getID(),this.getID());
+                        Database.insertData(block);
                     }
                     if (block.getClass() == Entertainment.class) {
                         block = (Entertainment) block;
+
+                        Database.deleteData("entertainment",block.getID(),this.getID());
+                        Database.insertData(block);
                     }
-                    if (avatar.getUserID() == block.getOwnerID()) {
+                    if (avatar.getID() == block.getOwnerID()) {
                         block.OwnerMenu(avatar);
                     } else {
                         System.out.println(1);
@@ -187,6 +229,8 @@ public class LightCity {
                 });
 
             }
+        ImageView imageView1 = new ImageView(Heaven.bankImage);
+        buttons[20].setGraphic(imageView1);
 
         infoLabel.setText("health = "+avatar.getHealth()+" food = "+avatar.getFood()+" drink = "+avatar.getDrink()+" happiness = "+avatar.getHappiness()+" money = "+avatar.getMoney());
 
@@ -235,6 +279,7 @@ public class LightCity {
                     buttons[i].setGraphic(imageView1);
                 }
 
+
                 buttons[i].setOnAction(e -> {
                     Block block = this.getBlocks().get(j);
                     if (block.getClass() == Bank.class) {
@@ -258,7 +303,7 @@ public class LightCity {
                     if (block.getClass() == Entertainment.class) {
                         block = (Entertainment) block;
                     }
-                    if (avatar.getUserID() == block.getOwnerID()) {
+                    if (avatar.getID() == block.getOwnerID()) {
                         block.OwnerMenu(avatar);
                     } else {
                         System.out.println(1);
@@ -267,6 +312,9 @@ public class LightCity {
                 });
 
             }
+            ImageView imageView1 = new ImageView(Heaven.bankImage);
+            buttons[20].setGraphic(imageView1);
+
             int i = 0;
 
             layout.add(buttons[i++], 0, 0);
@@ -333,16 +381,24 @@ public class LightCity {
         hBox1.setAlignment(Pos.TOP_LEFT);
         hBox2.setAlignment(Pos.TOP_RIGHT);
         hBox.getChildren().addAll(hBox1,hBox2);
+        hBox.setStyle("-fx-background-color : blue; -fx-font-size:14;");
          infoLabel = new Label("health = "+avatar.getHealth()+" food = "+avatar.getFood()+" drink = "+avatar.getDrink()+" happiness = "+avatar.getHappiness()+" money = "+avatar.getMoney());
         hBox1.getChildren().add(infoLabel);
         Button backButton = new Button("Back");
         backButton.setOnAction(e ->Heaven.menu(window));
         hBox2.getChildren().add(backButton);
 
-        hBox.setSpacing(900);
+        hBox.setSpacing(850);
         vBox.getChildren().addAll(hBox,layout);
         Scene scene = new Scene(vBox);
+        layout.getStylesheets().add(getClass().getResource("Test.css").toExternalForm());
+        Image img = new Image("C:\\Users\\Hico\\IdeaProjects\\Made in heaven\\2527739.jpg");
+        BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT,BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        Background back = new Background(bi);
+        layout.setBackground(back);
+
         window.setScene(scene);
+
 
 
 

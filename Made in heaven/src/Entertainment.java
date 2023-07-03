@@ -79,8 +79,8 @@ public class Entertainment extends Shop {
         layout.add(clubLabel,0,4);
         layout.add(cinemaButton,1,1);
         layout.add(parkButton,1,2);
-        layout.add(concertLabel,1,3);
-        layout.add(clubLabel,1,4);
+        layout.add(concertButton,1,3);
+        layout.add(clubButton,1,4);
         layout.add(backButton,0,5);
         layout.setVgap(10);
         layout.setHgap(10);

@@ -37,6 +37,9 @@ public class Block {
         this.cityID=cityID;
         this.ID = IDCreator;
         IDCreator++;
+        if (IDCreator==48){
+            IDCreator=0;
+        }
     }
     public LightCity getCity(){
         for(LightCity city: Heaven.getCities()){
@@ -295,6 +298,8 @@ public class Block {
                 Casino newBorn = new Casino(this.getName(),this.getCity().getCasinoIncome(),this.getCity().getCasinoPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
                 this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
+                Database.deleteData("block",this.getID(),this.getCityID());
+                Database.insertData(newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
@@ -305,6 +310,8 @@ public class Block {
                 DrugStore newBorn = new DrugStore(this.getName(),this.getCity().getDrugStoreIncome(),this.getCity().getDrugStorePrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
                 this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
+                Database.deleteData("block",this.getID(),this.getCityID());
+                Database.insertData(newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
@@ -315,6 +322,9 @@ public class Block {
                 Entertainment newBorn = new Entertainment(this.getName(),this.getCity().getEntertainmentIncome(),this.getCity().getEntertainmentPrice(),this.getSalary(),this.getOwnerID(),this.getID()-1,this.getCityID());
                 this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
+                Database.deleteData("block",this.getID(),this.getCityID());
+                Database.insertData(newBorn);
+
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
@@ -325,6 +335,8 @@ public class Block {
                 Factory newBorn = new Factory(this.getName(),this.getCity().getFactoryIncome(), this.getCity().getFactoryPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
                 this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
+                Database.deleteData("block",this.getID(),this.getCityID());
+                Database.insertData(newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
@@ -335,6 +347,8 @@ public class Block {
                 Restaurant newBorn = new Restaurant(this.getName(),this.getCity().getRestaurantIncome(),this.getCity().getRestaurantPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
                 this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
+                Database.deleteData("block",this.getID(),this.getCityID());
+                Database.insertData(newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }
@@ -345,6 +359,8 @@ public class Block {
                 SuperMarket newBorn = new SuperMarket(this.getName(),this.getCity().getSuperMarketIncome(),this.getCity().getSuperMarketPrice(),this.getSalary(),this.getOwnerID(),this.getID(),this.getCityID());
                 this.getCity().getBlocks().remove((int)this.getID()-1);
                 this.getCity().getBlocks().add((int)this.getID()-1,newBorn);
+                Database.deleteData("block",this.getID(),this.getCityID());
+                Database.insertData(newBorn);
                 newBorn.OwnerMenu(avatar);
                 window.close();
             }

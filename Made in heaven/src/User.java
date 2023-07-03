@@ -117,6 +117,7 @@ public class User {
                             Long.parseLong(restaurantIncomeField.getText()), Long.parseLong(casinoIncomeField.getText()),
                             Long.parseLong(factoryIncomeField.getText()));
                     Heaven.getCities().add(newCity);
+                    Database.insertData(newCity);
                     this.createAvatar(window,newCity);
 
                 } catch (Exception c) {
@@ -191,6 +192,7 @@ public class User {
                 if(checker){
                     LightCity lightCity = new LightCity(userNameField.getText(),passwordField.getText());
                     Heaven.getCities().add(lightCity);
+                    Database.insertData(lightCity);
                     createAvatar(window,lightCity);
                 }else{
                     AlertBox.display("problem","this username is already taken");
@@ -294,6 +296,8 @@ public class User {
                 System.out.println(1);
                 city.getAvatars().add(avatar);
                 System.out.println(2);
+                Database.insertData(avatar);
+                System.out.println(3);
                 city.menu(window,avatar);
             }catch (Exception c){
                 System.out.println(c);

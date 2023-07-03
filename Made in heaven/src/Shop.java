@@ -77,6 +77,7 @@ public class Shop extends Block{
         Scene scene = new Scene(vBox);
         window.setScene(scene);
         window.show();
+        window.setOnCloseRequest(e -> this.getCity().reload(avatar));
 
     }
     public void OwnerMenu(Avatar avatar){
